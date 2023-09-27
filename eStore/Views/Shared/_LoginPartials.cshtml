@@ -1,0 +1,27 @@
+﻿@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    var user = @HttpContextAccessor.HttpContext.Session.GetString("userEmail");
+}
+
+<ul class="navbar-nav">
+    @if (@user != null) {
+        <li class="nav-item">
+            <a class="nav-link">@user</a>
+        </li>
+        <li class="nav-item">
+            <form asp-controller="Auth" asp-action="Logout" method="post">
+                <input type="submit" value="Logout" class="btn btn-link nav-link" />
+            </form>
+        </li>
+    }
+    else {
+        <li class="nav-item">
+            <a href="/auth/login" class="nav-link">Login</a>
+        </li>
+        <li class="nav-item">
+            <a href="/auth/register" class="nav-link">Register</a>
+        </li>
+    }
+</ul>

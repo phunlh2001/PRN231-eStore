@@ -1,0 +1,99 @@
+﻿@model IEnumerable<BusinessObjects.Objects.Product>
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@{
+    ViewData["Title"] = "Home Page";
+
+    var user = @HttpContextAccessor.HttpContext.Session.GetString("userEmail");
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <aside>
+                <div class="nav-shopping">
+                    <h4>Shopping</h4>
+                    <hr style="width:80%;text-align:left;margin-left:0;border-style:dotted;">
+                    <ul>
+                        <li style="list-style-type: none;">
+                            <a href="/search">Search</a>
+                        </li>
+                        <hr style="width:75%;text-align:left;margin-left:0;border-style:dotted;">
+                    </ul>
+                </div>
+                @if (user != null) {
+                    <div class="nav-admin">
+                        @if(user == "admin@estore.com") {
+                        <h4>Administration</h4>
+                        <hr style="width:80%;text-align:left;margin-left:0;border-style:dotted;">
+                        <ul>
+                            <li style="list-style-type: none;">
+                                <a href="/product">Products</a>
+                            </li>
+                            <hr style="width:75%;text-align:left;margin-left:0;border-style:dotted;">
+                            <li style="list-style-type: none;">
+                                <a href="/user">Users</a>
+                            </li>
+                            <hr style="width:75%;text-align:left;margin-left:0;border-style:dotted;">
+                            <li style="list-style-type: none;">
+                                <a href="/report">Order Report</a>
+                            </li>
+                            <hr style="width:75%;text-align:left;margin-left:0;border-style:dotted;">
+                        </ul>
+                        } else {
+                            <h4>Customer</h4>
+                            <hr style="width:80%;text-align:left;margin-left:0;border-style:dotted;">
+                            <ul>
+                                <li style="list-style-type: none;">
+                                    <a href="/order">Order History</a>
+                                </li>
+                                <hr style="width:75%;text-align:left;margin-left:0;border-style:dotted;">
+                            </ul>
+                        }
+                    </div>
+                }
+            </aside>
+        </div>
+        <div class="col-md-9">
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>No.</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Weight</th>
+                        <th>Stock</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int indexID = 1; }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@indexID</td>
+                            <td>@item.ProductName</td>
+                            <td>@item.Category.CategoryName</td>
+                            <td>$@item.UnitPrice</td>
+                            <td>@item.Weight Ibs</td>
+                            <td>@item.UnitslnStock</td>
+                            <td>
+                                <a href="/product/detail/@item.ProductId" class="btn btn-outline-info">View</a>
+                                @if (user != null) {
+                                    @if (user == "admin@estore.com") {
+                                        <a href="/product/update/@item.ProductId" class="btn btn-success">Update</a>
+                                        <a href="/product/delete/@item.ProductId" class="btn btn-danger">Delete</a>
+                                    } else {
+                                        <a href="/order/create/@item.ProductId" class="btn btn-success">Buy</a>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        indexID++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

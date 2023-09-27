@@ -1,0 +1,40 @@
+﻿@model BusinessObjects.Objects.Order
+@{
+    ViewData["Title"] = "Order detail";
+
+    int indexID = 1;
+}
+
+<div class="text-center">
+    <h2>Order details</h2>
+    <hr />
+
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>No.</th>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Total Price</th>
+                <th>Quantity</th>
+                <th>Discount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderDetails)
+            {
+                <tr>
+                    <td>@indexID</td>
+                    <td>@item.Product.ProductName</td>
+                    <td>@item.Product.Category.CategoryName</td>
+                    <td>$@item.UnitPrice</td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.Discount * 100) %</td>
+                </tr>
+                indexID++;
+            }
+        </tbody>
+    </table>
+
+    <a href="/order">Back to order history</a>
+</div>

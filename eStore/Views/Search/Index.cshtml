@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Search";
+}
+
+<label>Search Box:</label>
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Input name of product..." onchange="console.log(this.value)" />
+</div>
+
+<div id="bodySearch"></div>
+
+@section Scripts {
+    <script>
+        $("input").on('keypress', function(e) {
+            // 13 is enter keypress
+            if (e.which == 13) {
+                let value = $(this).val();
+                let html = "";
+
+                let baseUrl = "https://localhost:44345"
+
+                $.ajax({
+                    type: "GET",
+                    url: `${baseUrl}/api/product/search?text=${value}`,
+                    success: (res) => {
+                        console.log(res);
+                        html += `<h3 class="display-4">Result for "${value}"</h3>`;
+                        html += `<table class="table">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>Product Name</th>
+                                                <th>Category</th>
+                                                <th>Price</th>
+                                                <th>Weight</th>
+                                                <th>Stock</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>`;
+                        html += '<tbody>';
+                        $.each(res, function(k, v) {
+                            html += `<tr>
+                                                <td>${v.productName}</td>
+                                                <td>${v.category.categoryName}</td>
+                                                <td>$${v.unitPrice}</td>
+                                                <td>${v.weight} Ibs</td>
+                                                <td>${v.unitslnStock}</td>
+
+                                              <td>
+                                                  <a href='/product/detail/${v.productId}' class="btn btn-outline-info">
+                                                       View
+                                                  </a>
+                                              </td>
+                                          </tr>`;
+                        });
+                        html += '</tbody>';
+                        html += '</table>';
+                        $("#bodySearch").html(html);
+                    },
+                    error: (err) => {
+                        console.log(err)
+                        html += `<h3 class="display-4 text-center">Not found for keyword "${value}"</h3>`;
+                        $("#bodySearch").html(html);
+                    }
+                })
+            }
+        })
+    </script>
+}

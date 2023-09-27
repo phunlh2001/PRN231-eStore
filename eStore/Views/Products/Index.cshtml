@@ -1,0 +1,15 @@
+﻿@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@{
+    ViewData["Title"] = "Products";
+
+    var user = @HttpContextAccessor.HttpContext.Session.GetString("userEmail");
+}
+
+<div class="text-center">
+    <h2>Create new product?</h2>
+    @if (user == "admin@estore.com") {
+        <a href="/product/add" class="btn btn-success">Create</a>
+    }
+    <a href="/" class="btn btn-outline-primary">Back</a>
+</div>

@@ -1,0 +1,17 @@
+﻿@model BusinessObjects.Objects.Product
+@{
+    ViewData["Title"] = "View Details";
+}
+
+<h2>Product Details</h2>
+
+<dl>
+    <dt>@Model.ProductName</dt>
+    <dd>Category: @Model.Category.CategoryName</dd>
+    <dd>Price: $@Model.UnitPrice</dd>
+    <dd>Weight: @Model.Weight lbs</dd>
+    <dd>Stock: @Model.UnitslnStock</dd>
+    <dt>
+        <a href="/" class="btn btn-outline-info">Back to home</a>
+    </dt>
+</dl>

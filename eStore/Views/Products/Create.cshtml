@@ -1,0 +1,27 @@
+﻿@model BusinessObjects.Objects.Product
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<h2>Create</h2>
+
+<form asp-action="Create" method="post">
+    Product Name: <input type="text" class="form-control" asp-for="ProductName" />
+    <span class="text-danger" asp-validation-for="ProductName"></span> <br />
+
+    Category: 
+    <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.cate"></select>
+    <br />
+
+    Weight: <input type="number" placeholder="Ibs" class="form-control" asp-for="Weight" />
+    <span class="text-danger" asp-validation-for="Weight"></span> <br />
+
+    Price: <input type="number" placeholder="USD" class="form-control" asp-for="UnitPrice" />
+    <span class="text-danger" asp-validation-for="UnitPrice"></span> <br />
+
+    Stock: <input type="number" placeholder="From 1 to 500" class="form-control" asp-for="UnitslnStock" />
+    <span class="text-danger" asp-validation-for="UnitslnStock"></span> <br />
+    
+    <input type="submit" value="Create" class="btn btn-success">
+    <a href="/" class="btn btn-outline-primary">Back to home</a>
+</form>

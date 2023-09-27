@@ -1,0 +1,24 @@
+﻿@model BusinessObjects.DTOs.LoginInfo
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+
+<form asp-action="Login" method="post" class="w-25">
+    <span class="text-danger">@ViewBag.error</span> <br />
+
+    Email: <input class="form-control" type="email" asp-for="Email" />
+    <span class="text-danger" asp-validation-for="Email"></span> <br />
+
+    Password: <input class="form-control" type="password" asp-for="Password" />
+    <span class="text-danger" asp-validation-for="Password"></span> <br />
+
+    <input type="submit" value="Submit" class="btn btn-success" />
+    <a href="/" class="btn btn-outline-primary">Back</a>
+</form>
+<hr>
+<div class="text-secondary">
+    <span>Email: admin@estore.com</span><br/>
+    <span>Password: admin&#64;&#64;</span>
+</div>

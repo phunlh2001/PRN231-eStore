@@ -1,0 +1,79 @@
+﻿@model IEnumerable<BusinessObjects.Objects.Order>
+@using Microsoft.AspNetCore.Http;
+@using System.Globalization
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Order";
+
+    var user = @HttpContextAccessor.HttpContext.Session.GetString("userEmail");
+    int indexID = 1;
+}
+
+<div class="text-center">
+    <h2>Hi, @user! All your orders</h2>
+    <hr />
+
+    <table class="table">
+        <thead class="table thead-light table-bordered">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Order Date</th>
+                <th scope="col">Required Date</th>
+                <th scope="col">Shipped Date</th>
+                <th scope="col">Freight</th>
+                <th scope="col">Status</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count() != 0)
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@indexID</td>
+                        <td>@item.OrderDate</td>
+                        <td>@item.RequiredDate</td>
+                        <td>@item.ShippedDate</td>
+                        <td>$@item.Freight</td>
+                        <td>
+                            @if (DateTime.TryParseExact(item.ShippedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime shippedDate)) {
+                                if (shippedDate <= DateTime.Now) {
+                                    <button class="btn btn-success" disabled>Done</button>
+                                } else {
+                                    <button class="btn btn-secondary" disabled>Waiting...</button>
+                                    <button class="btn btn-outline-warning" onclick="cancelOrder(@item.OrderId)">
+                                        Cancel
+                                    </button>
+                                }
+                            }
+                        </td>
+                        <td>
+                            <a href="/order/@item.OrderId" class="btn btn-outline-info">View detail</a>
+                        </td>
+                    </tr>
+                    indexID++;
+                }   
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        function cancelOrder(orderId) {
+            const formData = new FormData();
+            formData.append("id", orderId)
+
+            const xhr = new XMLHttpRequest()
+            xhr.open("POST", "/order/cancel", true)
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    window.location.href = "/order"
+                }
+            }
+
+            xhr.send(formData)
+        }
+    </script>
+}

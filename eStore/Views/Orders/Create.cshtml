@@ -1,0 +1,26 @@
+﻿@model BusinessObjects.DTOs.OrderInfo
+@{
+    ViewData["Title"] = "Create Order";
+}
+
+<h2>New Order</h2>
+<hr />
+
+<form asp-action="Create" method="post" class="w-25">
+    <span class="text-danger">@ViewBag.error</span> <br />
+
+    Product Name: 
+    <input class="form-control" value="@ViewBag.productName" readonly /> 
+    <br />
+
+    Freight: 
+    <select asp-for="Freight" class ="form-control" asp-items="ViewBag.freight"></select>
+    <br />
+
+    Quantity: 
+    <input type="number" min="1" max="500" placeholder="From 1 to 500" class="form-control" asp-for="Quantity" />
+    <br />
+
+    <input type="submit" value="Confirm" class="btn btn-success" />
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">Cancel</a>
+</form>

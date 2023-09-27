@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Report";
+}
+
+<div class="row">
+    <div class="col-md-2">
+        <div class="form-group">
+            Start Date:
+            <input type="date" class="form-control" id="start"
+                   min="2023-09-01" max="2023-12-31" value="2023-09-20" />
+        </div>
+        <div class="form-group">
+            End Date:
+            <input type="date" class="form-control" id="end"
+                   min="2023-09-01" max="2023-12-31" value="2023-09-20" />
+        </div>
+        <div class="form-group">
+            <input type="button" value="Filter" class="btn btn-outline-primary" />
+        </div>
+    </div>
+    <div class="col-md-10" id="bodyFilter"></div>
+</div>
+
+@section Scripts{
+    <script>
+        $("input[type=button]").click(function() {
+            const st = $("#start").val().split("-")
+            const ed = $("#end").val().split("-")
+
+            const start = st[2] + '/' + st[1] + '/' + st[0]
+            const end = ed[2] + '/' + ed[1] + '/' + ed[0]
+            let html = "";
+            const baseUrl = "https://localhost:44345/api"
+
+            // check end date comes before start date
+            if (Date.parse(st.join("-")) > Date.parse((ed.join("-")))) {
+                $("#bodyFilter")
+                    .html(`<h3 class="display-4 text-center">Filter start date and end date invalid</h3>`);
+            } else {
+                $.ajax({
+                    type: "GET",
+                    url: `${baseUrl}/order/filter?startDate=${start}&endDate=${end}`,
+                    success: function(res) {
+                        console.log(res)
+                        html += `<h2 class="text-normal">Result:</h2>`;
+                        html += ` <table class="table">
+                                    <thead class="table thead-light table-bordered">
+                                        <tr>
+                                            <th scope="col">Order Date</th>
+                                            <th scope="col">Required Date</th>
+                                            <th scope="col">Shipped Date</th>
+                                            <th scope="col">Freight</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>`;
+                        html += '<tbody>';
+                        $.each(res, function(k, v) {
+                            html += `<tr>
+                                        <td>${v.orderDate ?? ""}</td>
+                                        <td>${v.requiredDate ?? ""}</td>
+                                        <td>${v.shippedDate ?? ""}</td>
+                                        <td>$${v.freight ?? ""}</td>
+                                        <td>
+                                           <a href='order/${v.orderId}' class="btn btn-secondary">
+                                                View details
+                                           </a>
+                                        </td>
+                                     </tr>`;
+                        });
+                        html += '</tbody>';
+                        html += '</table>';
+                        $("#bodyFilter").html(html);
+                    },
+                    error: function(err) {
+                        $("#bodyFilter")
+                            .html(`<h3 class="display-4 text-center">Not found <b>Order</b> start date at:<br /> ${start}</h3>`);
+                    }
+                });
+            }
+        })
+    </script>
+}

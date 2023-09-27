@@ -1,0 +1,31 @@
+﻿@model BusinessObjects.DTOs.RegisterInfo
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>Register Account</h2>
+
+<span class="text-danger">@ViewBag.error</span> <br />
+
+<form asp-action="Register" method="post" class="w-25">
+    Email: <input class="form-control" type="email" asp-for="Email" />
+    <span class="text-danger" asp-validation-for="Email"></span> <br />
+    
+    Company Name: <input class="form-control" type="text" asp-for="CompanyName" />
+    <span class="text-danger" asp-validation-for="CompanyName"></span> <br />
+
+    City: <input class="form-control" type="text" asp-for="City" />
+    <span class="text-danger" asp-validation-for="City"></span> <br />
+
+    Country: <input class="form-control" type="text" asp-for="Country" />
+    <span class="text-danger" asp-validation-for="Country"></span> <br />
+
+    Password: <input class="form-control" type="password" asp-for="Password" />
+    <span class="text-danger" asp-validation-for="Password"></span> <br />
+
+    Confirm Password: <input class="form-control" type="password" asp-for="ConfirmPassword" />
+    <span class="text-danger" asp-validation-for="ConfirmPassword"></span> <br />
+
+    <input type="submit" value="Submit" class="btn btn-success" />
+    <a href="/" class="btn btn-outline-primary">Back</a>
+</form>
